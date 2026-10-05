@@ -1,0 +1,12 @@
+{
+  "name": "kailth-bot",
+  "version": "1.0.0",
+  "description": "Messenger Bot KAILTH",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "facebook-chat-api": "^1.8.0"
+  }
+}
