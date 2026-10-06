@@ -1,18 +1,42 @@
-const fs = require('fs'); // تأكد من وجود هذا السطر في أعلى الملف
+const fs = require('fs');
+const login = require('fca-unofficial'); // أو اسم مكتبة الفيسبوك المستخدمة لديك
+const { startDashboard } = require('./dashboard');
 
-// 1. تحديد مصدر الكوكيز (من الملف المحلي أولاً، أو من المتغيرات)
+// تشغيل سيرفر الداشبورد
+startDashboard();
+
+// قراءة الكوكيز بأمان
 let appState;
-if (fs.existsSync('./appstate.json')) {
-  appState = JSON.parse(fs.readFileSync('./appstate.json', 'utf8'));
-} else if (process.env.APPSTATE) {
-  appState = JSON.parse(process.env.APPSTATE);
+try {
+  if (fs.existsSync('./appstate.json')) {
+    const rawData = fs.readFileSync('./appstate.json', 'utf8');
+    appState = JSON.parse(rawData);
+    console.log('[Info] تم قراءة الكوكيز من appstate.json');
+  } else if (process.env.APPSTATE) {
+    appState = JSON.parse(process.env.APPSTATE);
+    console.log('[Info] تم قراءة الكوكيز من متغيّرات Railway');
+  }
+} catch (err) {
+  console.error('[Error] خطأ في تحويل كود الكوكيز (JSON غير صحيح):', err.message);
 }
 
-// 2. تمرير المتغير appState إلى دالة تسجيل الدخول
-login({ appState }, (err, api) => {
-  if (err) return console.error("خطأ في تسجيل الدخول:", err);
+if (!appState) {
+  console.error('[Error] لم يتم العثور على كوكيز صالحة. يرجى إدخالها عبر الداشبورد أو Railway.');
+} else {
+  // تسجيل الدخول
+  login({ appState }, (err, api) => {
+    if (err) {
+      console.error('[Error] فشل تسجيل الدخول! قد تكون الكوكيز منتهية الصلاحية:', err);
+      return;
+    }
 
-  console.log("تم تسجيل الدخول بنجاح!");
-  
-  // بقية كود البوت كما هو...
-});
+    console.log('[Success] تم تسجيل الدخول بنجاح إلى فيسبوك!');
+
+    // استماع للرسائل والأوامر
+    api.listenMqtt((err, event) => {
+      if (err) return console.error(err);
+
+      // قم بإضافة معالجة الأوامر الخاصة بالبوت هنا
+    });
+  });
+}
