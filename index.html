@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم بوت KAILTH</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #0d0f17;
+            color: #ffffff;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        /* Top Navigation Header */
+        .header {
+            background-color: #161926;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #232738;
+        }
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-badge {
+            background-color: #10b98120;
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #10b98140;
+        }
+        .btn-logout {
+            background-color: #ef444420;
+            color: #ef4444;
+            border: 1px solid #ef444440;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        /* Stats Cards Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .stat-card {
+            background-color: #161926;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #232738;
+        }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .stat-value.ram { color: #f43f5e; }
+        .stat-value.shield { color: #3b82f6; }
+        .stat-label {
+            font-size: 0.75rem;
+            color: #8b92a7;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background-color: #161926;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #232738;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .panel-title {
+            font-size: 0.85rem;
+            color: #8b92a7;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-restart { background-color: #22c55e; color: #fff; }
+        .btn-stop { background-color: #ef4444; color: #fff; }
+        
+        .sub-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .btn-sub {
+            flex: 1;
+            background-color: #232738;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid #2e344a;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Messages Card */
+        .messages-card {
+            background-color: #161926;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #232738;
+        }
+        .messages-box {
+            background-color: #0f111a;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #1a1e2e;
+            color: #8b92a7;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        /* Bottom Nav Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #121420;
+            border-top: 1px solid #232738;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+        }
+        .nav-item {
+            color: #64748b;
+            font-size: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body style="padding-bottom: 70px;">
+
+    <!-- Top Navigation -->
+    <div class="header">
+        <button class="btn-logout">خروج</button>
+        <span class="status-badge">• متصل</span>
+        <div class="header-title">KAILTH V1 ⚜︎</div>
+    </div>
+
+    <!-- System Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value ram">110.6</div>
+            <div class="stat-label">RAM (MB)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value shield">20</div>
+            <div class="stat-label">طبقات الحماية</div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="control-panel">
+        <div class="panel-title">التحكم الرئيسي</div>
+        <button class="btn-action btn-restart">🔄 إعادة تشغيل</button>
+        <button class="btn-action btn-stop">⏹ إيقاف البوت</button>
+        
+        <div class="sub-actions">
+            <button class="btn-sub">📊 تحديث</button>
+            <button class="btn-sub">🏓 Ping</button>
+            <button class="btn-sub">💬 فتح المسنجر</button>
+        </div>
+        <button class="btn-sub" style="margin-top: 5px;">📋 السجلات</button>
+    </div>
+
+    <!-- Messages Log -->
+    <div class="messages-card">
+        <div class="panel-title">آخر الرسائل</div>
+        <div class="messages-box">لا توجد رسائل بعد...</div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item">🛡️<span>حماية</span></a>
+        <a href="#" class="nav-item">✏️<span>محرر</span></a>
+        <a href="#" class="nav-item">🎲<span>تفعيل</span></a>
+        <a href="#" class="nav-item">📦<span>أوامر</span></a>
+        <a href="#" class="nav-item">💬<span>مسنجر</span></a>
+        <a href="#" class="nav-item active">🏠<span>الرئيسية</span></a>
+    </div>
+
+</body>
+</html>
