@@ -54,12 +54,12 @@ if (!appState) {
         const body = event.body ? event.body.trim() : '';
         const senderID = event.senderID;
 
-        // التحقق مما إذا كان الملاسل هو الأدمن
+        // التحقق مما إذا كان المرسل هو الأدمن
         const isAdmin = Array.isArray(config.adminID) 
           ? config.adminID.includes(senderID) 
           : config.adminID === senderID;
 
-        // تجربة أمر المساعدة بدون بادئة أو مع البادئة
+        // البادئة المسجلة في Config
         const prefix = config.prefix || '⚜︎';
 
         if (body.startsWith(prefix + 'مساعدة') || body.startsWith(prefix + 'help') || body.toLowerCase() === 'help') {
