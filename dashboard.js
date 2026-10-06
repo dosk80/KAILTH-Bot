@@ -1,12 +1,25 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+let dashboardServer = null;
 
-// إجبار Express على استغلال المنفذ المخصص من Railway
-const PORT = process.env.PORT || 3000;
+// Railway supplies PORT at runtime. Keep 3000 as a local development fallback.
+const PORT = Number(process.env.PORT || 3000);
+const HOST = '0.0.0.0';
+
+if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
+  throw new Error(`Invalid PORT value: ${process.env.PORT}`);
+}
+
+app.disable('x-powered-by');
 
 function startDashboard() {
-  // إرسال ملف index.html إذا كان موجوداً، أو عرض الداشبورد مباشرة
+  if (dashboardServer) return dashboardServer;
+
+  app.get('/healthz', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   app.get('/', (req, res) => {
     const htmlPath = path.join(__dirname, 'index.html');
     const fs = require('fs');
@@ -39,10 +52,21 @@ function startDashboard() {
     }
   });
 
-  // الاستماع على 0.0.0.0 وهو شرط أساسي لـ Railway
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Dashboard] السيرفر يعمل الآن بنجاح على المنفذ: ${PORT}`);
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`[Dashboard] Listening on http://${HOST}:${PORT}`);
   });
+  dashboardServer = server;
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`[Error] PORT_BUSY: ${HOST}:${PORT} is already in use.`);
+    } else {
+      console.error('[Error] Dashboard server failed to start:', error);
+    }
+    process.exit(1);
+  });
+
+  return server;
 }
 
 module.exports = { startDashboard };
